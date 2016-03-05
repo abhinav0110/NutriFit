@@ -1,0 +1,78 @@
+###################################################
+##  Algorithm Ideas for various types of input.  ##
+###################################################
+
+**[ Ate food action ]*************************
+
+Input: "I ate <int> <food>."
+
+Action: Search database for each food provided.  If any are not found, tell user.  Otherwise, get the nutritional information for each food item (cals + cals from fat/carbs/protein).  Multiply each one by it's int (if provided, default of 1).  Log this into user's database.  Update running total of calories/fat/carbs/protein for that user.  Tell the user that the information has been logged.
+
+**[ Ask for food reccomendation ]*************
+
+Input: "What should I eat?"
+
+Action: Fetch user's daily total, subtract this from daily guidelines (2000 calories, etc).  This will be how much more of each thing they can eat that day.  If before 11am, divide by 3.  If between 11 and 5, divide by 2.  If after 5, use the original values.  Take these values and use them to search the database for a food that fits these guidelines the best (max value without going over?).  Reccommend this food to the user.  Log the event.
+
+**[ Ask if okay to eat a food ]***************
+
+Input: "Should I eat <int> <food>?"
+
+Action: Search database for the food provided.  If not found, tell user.  Otherwise, get nutritional information for the food.  Multiple each spec. by the int (default if not provided = 1).  Get the user's daily total of cals/macromolecules and subtract from daily guidelines.  Divide according to the time of day (see above).  If the food requested is <= these guidelines, respond yes.  Otherwise, respond no.  Log the event.
+
+
+
+#############################################################################################################
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+| p | o | s | s | i | b | l | e |   | i | n | p | u | t | / | o | u | t | p | u | t |   | i | d | e | a | s |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+#############################################################################################################
+
+**[ Ate food 1]***********************************
+
+User: I ate <food item>.
+Prog: Okay, that's about <int> calories.  You can eat <int> more calories for the day.  I'd recommend something with more <fat/protein/carbohydrates> later.
+
+
+**[ Ate food 2]***********************************
+
+User: I ate <int> <food item>.
+Prog: Okay, that's about <int> calories.  You can eat <int> more calories for the day.  I'd recommend something with more <fat/protein/carbohydrates> later.
+
+**[ Ate food 2]***********************************
+
+User: I ate <food item> and <food item>.
+Prog: Okay, that's about <int> calories.  You can eat <int> more calories for the day.  I'd recommend something with more <fat/protein/carbohydrates> later.
+
+
+**[ Ask what to eat 1]****************************
+
+User: What should I have for lunch?
+Prog: [Since your breakfast had <fat/protein/carbs> and you have <int> calories remaining for the day,] I would recommend having <food item>.
+
+**[ Ask what to eat 2]****************************
+
+User: What should I have for breakfast?
+Prog: [Since you had <too much/not enough> <fat/protein/carbs> yesterday,] I would recommend having <food item>.
+
+**[ Ask to eat certain food 1]********************
+
+User: Is it okay to eat <food item>?
+Prog: [Well you have already had <int> calories today, so] that is fine.
+
+**[ Ask to eat certain food 2]********************
+
+User:  Is it okay to eat <food item>?
+Prog: [Well you have already had <int> calories today, so] I would recommend eating something else.  Maybe have <food item> instead.
+
+**[ Ask to eat certain food 3]********************
+
+User:  Is it okay to eat <food item>?
+Prog: [Well you have already had <int> calories today, so] I don't think you should eat any more.  Try drinking a glass of water, instead.
+
+**[ Ask for current info ]************************
+
+User: What  have I had today?
+Prog: So far you had <food item> which was high in <fat/carb/protein> and had <int> calories.
+
+**[  ]********************************************
