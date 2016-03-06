@@ -97,7 +97,7 @@ chatbox{
 }
 
 #messages li:hover{
-	background-color: red;
+	background-color: rgba(255, 255, 255, .3);
 }
 
 #messageInput{

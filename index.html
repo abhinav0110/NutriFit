@@ -38,7 +38,7 @@
             <div class="app-content container">
                 <!-- Body -->
                 <div class="row">
-                    <img class="talk-btn img-responsive" src="./img/mic.png" onclick="getVoice()" />
+                    <img class="talk-btn img-responsive" src="./img/mic.png" onclick="callNutriFit()" />
                     <!-- CHAT -->
                     <div class="col-md-12">
                         <div class="chatContainer">
@@ -67,7 +67,9 @@
                 <br>
             </div>
             <div>
-                <p>User: <span id="username"></span></p>
+                <h2>User:</h2>
+                <p class="userDesc"><span id="username"></span><br>Gender: <span class="userDesc" id="gender">-</span><br>Weight: <span class="userDesc" id="weight">-</span><br>Age: <span class="userDesc" id="age">-</span></p>
+                <h4>Today's:</h4>
                 <p>Calorie Intake: <span id="calorie-cntr"></span></p>
             	<p>Fat: <span id="fat-cntr"></span></p>
             	<p>Protein: <span id="protein-cntr"></span></p>

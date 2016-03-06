@@ -1,20 +1,13 @@
-// NutriFit Functions
-say = function(speech) {
-    responsiveVoice.speak(speech, "UK English Female");
-}
+// Instantiation of various vars
+var unit = "", name = "", age = 0, gender = "", weight = 0, exer = 0, fat = 0.0, prot = 0.0, carb = 0.0, c = 1, cal = 0.0, min = 0.0, per_fat = 0.0, per_carb = 0.0, per_prot = 0.0, cal_eaten = 0.0, returnFood = "";
 
-startCoach = function() {
-    say("Hello and welcome to NutriFit! I am FitPal, your personal nutritionist A I. What is your name?");
-    setTimeout(function(){
-      reqUserInfo("getName");
-    }, 7000);
-}
 
-var user = {};
+fitnessCoach = function() {
 
-// Function dedicated for requesting user info including Name, Gender, Weight and Age
-reqUserInfo = function(reqParam) {
-    console.log(reqParam);
+    // setTimeout(function(){
+    say("How active are you on a scale of 1 to 3, where 3 is super active?");
+    // }, 1000);
+
     setTimeout(function() {
         window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
         if (window.SpeechRecognition == null) {
@@ -23,6 +16,7 @@ reqUserInfo = function(reqParam) {
             var recognizer = new window.SpeechRecognition();
             recognizer.continuous = false;
             var text;
+            var name;
             recognizer.onresult = function(event) {
                 for (var i = event.resultIndex; i < event.results.length; i++) {
                     if (event.results[i].isFinal) {
@@ -31,62 +25,325 @@ reqUserInfo = function(reqParam) {
                         text += event.results[i][0].transcript;
                     }
                 }
-                var userVoiceInput = text.toLowercase();
+                var splitScript = event.results[0][0].transcript.split(" ");
+                console.log(text);
+                $.ajax({
+                    type: "POST",
+                    url: "/",
+                    data: {
+                        input: text
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        var logData = {};
+                        exer = 2;
+                        say("I have updated your fitness");
+
+                        setCal();
+                        if (cal == undefined){
+                            cal = 2000.0;
+                        }
+                        break;
+                    }
+                });
+
+            };
+            recognizer.onerror = function(error) {
+                console.log(error);
+            };
+            try {
+                recognizer.start(); // SUCCESS
+            } catch (ex) {
+                console.log(ex.message);
+            }
+        }
+    }, 4800);
+}
+
+var setCal = function() {
+    if (gender == "Male") {
+        if (exer == 0) {
+            min = 1.3;
+        } else if (exer == 1) {
+            min = 1.6;
+        } else if (exer == 2) {
+            min = 1.7;
+        } else if (exer == 3) {
+            min = 2.1;
+        }
+        if (age < 3) {
+            cal = 60 * min * weight - 30;
+        } else if (age >= 3 && age < 10) {
+            cal = 23 * min * weight + 505
+        } else if (age >= 10 && age < 18) {
+            cal = 18 * min * weight + 659;
+        } else if (age >= 18 && age < 30) {
+            cal = 15 * min * weight + 692;
+        } else if (age >= 30 && age < 60) {
+            cal = 11.4 * min * weight + 873;
+        } else if (age >= 60) {
+            cal = 11.7 * min * weight + 587;
+        }
+    } else if (gender == "Female") {
+        if (exer == 0) {
+            min = 1.3;
+        } else if (exer == 1) {
+            min = 1.5;
+        } else if (exer == 2) {
+            min = 1.6;
+        } else if (exer == 3) {
+            min = 1.9;
+        }
+        if (age < 3) {
+            cal = 58 * min * weight - 31;
+        } else if (age >= 3 && age < 10) {
+            cal = 20 * min * weight + 485
+        } else if (age >= 10 && age < 18) {
+            cal = 13 * min * weight + 692;
+        } else if (age >= 18 && age < 30) {
+            cal = 15 * min * weight + 486;
+        } else if (age >= 30 && age < 60) {
+            cal = 8 * min * weight + 845;
+        } else if (age >= 60) {
+            cal = 9 * min * weight + 658;
+        }
+    }
+}
+
+function calc() //function gets called every time user says a food article
+{
+
+    cal_eaten += c * (fat * 9 + prot * 4 + carb * 4);
+    per_fat = (fat * 9 / cal_eaten);
+    per_prot = (prot * 4 / cal_eaten);
+    per_carb = (carb * 4 / cal_eaten);
+}
+
+function op() {
+    for (key in dataset) {
+        if (per_fat < .28) {
+            //Print eat more fat
+            var val = (.30 - per_fat);
+            var Eat = val * cal;
+            //Display to screen Eat
+            if (dataset[key]["Energ_Kcal"] <= Eat) {
+                returnFood = key;
+                break;
+            }
+        }
+        if (per_fat > .32) {
+            //print eat less fat
+            var val = (per_fat - 0.30);
+            var Eat = val * cal;
+            //Display to screen Eat
+
+        }
+        if (per_prot > .23) {
+            //print eat less prot
+            var val = (per_prot - 0.20);
+            var Eat1 = val * cal;
+            //Display to screen Eat
+        }
+        if (per_prot < .19) {
+            //print eat more prot
+            var val = (0.20 - per_prot);
+            var Eat1 = val * cal;
+            if (dataset[key]["Energ_Kcal"] <= Eat) {
+                returnFood = key;
+                break;
+            }
+        }
+        if (per_carb < .48) {
+            //print eat more carb
+            var val = (0.50 - per_carb);
+            var Eat2 = val * cal;
+            //Display to screen Eat
+            if (dataset[key]["Energ_Kcal"] <= Eat) {
+                returnFood = key;
+                break;
+            }
+        }
+        if (per_carb > .51) {
+            //print eat less carb
+            var val = (per_carb - 0.50);
+            var Eat2 = val * cal;
+            //Display to screen Eat
+        }
+
+    }
+
+}
+
+
+
+var caloriesOption = function(calories) {
+
+    return true;
+}
+
+var caloriesShould = function(food) {
+    var name = dataset[food];
+    var cb = name["Energ_Kcal"];
+    if (cal - cal_eaten - cb < 0) {
+        return false;
+    }
+    return true;
+}
+
+
+// var name;
+
+var caloriesBurn = 0;
+
+updateCalories = function(calories) {
+    $("#calories").text(calories);
+    $.apply
+}
+
+var log = [];
+
+var leanSchedule = [{
+    time: "7 am",
+    activity: "Breakfest, egg and wheat bread"
+}, {
+    time: "9 am",
+    activity: " 30 mintue Run"
+}, {
+    time: "11 am",
+    activity: "Cycling Club"
+
+}, {
+    time: "12 pm",
+    activity: "Lunch, chicken and caesar salad"
+}, {
+    time: "3 pm",
+    activity: "Lean Weight Training, core and legs"
+}, {
+    time: "4 pm",
+    activity: "Snack, fruits"
+}, {
+    time: "7 pm",
+    activity: "Dinner, salmon with steam vegetables"
+
+
+}, {
+    time: "9 am",
+    activity: "Sleep"
+}];
+
+
+// NutriFit Functions
+say = function(speech) {
+    responsiveVoice.speak(speech, "UK English Female");
+}
+
+startCoach = function() {
+    say("Hello and welcome to NutriFit! I am Shirley, your personal nutritionist A I. What is your name?");
+    setTimeout(function() {
+        reqUserInfo("getName");
+    }, 5500);
+}
+
+var user = {};
+
+// Function dedicated for requesting user info including Name, Gender, Weight and Age
+reqUserInfo = function(reqParam) {
+    console.log("Requesting... ");
+    console.log(reqParam);
+    setTimeout(function() {
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+        if (window.SpeechRecognition == null) {
+            console.log('empty');
+        } else {
+
+            // MICROPHONE RECOGNITION
+            var recognizer = new window.SpeechRecognition();
+            recognizer.continuous = false;
+            var text = "";
+            recognizer.onresult = function(event) {
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        text = event.results[i][0].transcript;
+                    } else {
+                        text += event.results[i][0].transcript;
+                    }
+                }
+                var userVoiceInput = text.toLowerCase();
                 var splitScript = event.results[0][0].transcript.split(" ");
                 console.log("arrive at params");
+
                 // Get user name
-                if (reqParam == "getName") 
-                {                
-                  console.log("Getting username...");
-                  user.name = splitScript[splitScript.length - 1];
-                  say("Hey there " + user.name + "!");
-                  init_firebase(user.name);
-                  if(getUserSessions(user.name) < 1){
-                    reqUserInfo("getGender");
-                  }
-                } 
+                if (reqParam == "getName") {
+                    console.log("Getting username...");
+                    user.name = splitScript[splitScript.length - 1];
+                    say("Hey there " + user.name + "!");
+                    init_firebase(user.name);
+                    // Check database if user sessions are greater than 1 here
+
+                    say("What is your gender?");
+                    setTimeout(function() {
+                        reqUserInfo("getGender");
+                    }, 3000);
+                }
 
                 // Get user gender
-                else if (reqParam == "getGender") 
-                {       
-                  console.log("Getting user gender...");
-                  if (userVoiceInput.indexOf('female') >= 0) {
-                    user.gender = "female";
-                  } else {
-                    user.gender = "male";
-                  }
-                  say("Okay, got it - you are " + user.gender);
-                } 
+                else if (reqParam == "getGender") {
+                    console.log("Getting user gender...");
+                    if (userVoiceInput == 'male' || userVoiceInput == 'mail')
+                      user.gender = 'male';
+                    else if (userVoiceInput == 'female')
+                      user.gender = 'female';
+                    else
+                      user.gender = 'other';
+                    say("Okay, got it - you are " + user.gender);
+                    $("#gender").text(user.gender);
+                    say("How many pounds do you weight?");
+                    setTimeout(function() {
+                        reqUserInfo("getWeight");
+                    }, 4000);
+                }
 
                 // Get user weight
-                else if (reqParam == "getWeight") 
-                {       
-                  console.log("Getting user weight...");
-                  user.weight = callNutriFit("getWeight");
-                  if (userVoiceInput.indexOf('kilograms')) {
-                    systemUse = "metric";
-                  } else {
-                    systemUse = "imperial";
-                  }
-                  say("Okay, got it - you weigh " + user.weight);
-                  if(systemUse == "metric")
-                    say("kilograms");
-                  else
-                    say("imperial");
-                } 
+                else if (reqParam == "getWeight") {
+                    var weight = parseInt(splitScript[0]);
+                    console.log(splitScript[0] + " -> " + weight);
+                    console.log("Getting user weight...");
+                    if (userVoiceInput.indexOf('i don\'t know') >= 0) {
+                        user.weight = 150;
+                        say("Okay, let's just say you're 150 pounds then.");
+                    } else if (weight <= 0 || weight >= 1000) {
+                        user.weight = 150;
+                        say("Okay, let's just say you're 150 pounds.");
+                    } else {
+                        user.weight = weight;
+                        // user.weight = callNutriFit("getWeight");
+                        if (userVoiceInput.indexOf('kilograms')) {
+                            systemUse = "metric";
+                        } else {
+                            systemUse = "imperial";
+                        }
+                        say("Okay, got it - you weigh " + user.weight + " pounds.");
+                    }
+                    $("#weight").text(user.weight + " lbs.");
+                    say("How many years old are you?");
+                    setTimeout(function() {
+                        reqUserInfo("getAge");
+                    }, 5000);
+                }
 
                 // Get user age
-                else if (reqParam == "getAge") 
-                {          
-                  console.log("Getting user age...");
-                  user.age = callNutriFit("getAge");
-                  say("Okay, got it - you are " + user.age + " years old.");
+                else if (reqParam == "getAge") {
+                    console.log("Getting user age...");
+                    // user.age = callNutriFit("getAge");
+                    user.age = splitScript[0];
+                    $("#age").text(user.age);
+                    say("Okay, got it - you are " + user.age + " years old.");
+                    say("Alright, I have saved your information!");
                 }
 
                 // Catch alien calls
-                else
-                {
-                  say("I'm sorry, I don't quite understand.");
+                else {
+                    say("I'm sorry, I don't quite understand.");
                 }
             };
             recognizer.onerror = function(error) {
@@ -102,77 +359,164 @@ reqUserInfo = function(reqParam) {
     }, 2000);
 }
 
-callNutriFit = function(userVoiceInput, param) {
-  var logData = {};
-  var nutrifitResponse;
+beginLoop = function() {
+    console.log("Loop Beginning");
+    var stayloop = 1;
+    while (stayloop) {
+        setTimeout(function() {
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+            if (window.SpeechRecognition == null) {
+                console.log('empty');
+            } else {
 
-  $.ajax({
-    type: "POST",
-    url: "/",
-    data: {
-      input: userVoiceInput
-    },
-    success: function(data) {
-      console.log(data);
-      switch (param) {
-        case "getAge":
-          age = parseInt(splitScript[splitScript.length - 1]);
-          if (age == undefined){
-            age = 30;
-          }
-          break;
-      case 'Food_eaten':
-        nutrifitResponse = "Great, I added that you have eaten " + data.number + data.food + " to your log";
-        say();
-        console.log("" + data.food);
-        var key = dataset[("" + data.food)];
-        console.log(dataset[("" + data.food)]);
-        prot += key["Protein"]
-        fat += key["Lipid_Tot"];
-        carb += key["Carbohydrt"];
-        calc();
-        logData.food = data.food;
-        logData.count = data.number;
-        logData.date = new Date();
-        log.push(logData);
-        $("#calories").text(cal_eaten);
-        messagesRef.push({
-          name: "FitPal",
-          text: nutrifitResponse
-        });
-        break;
-      case 'Food_option':
-        if (caloriesShould(("" + data.food))) {
-            nutrifitResponse = "Great, you should eat " + data.food;
-        } else {
-            nutrifitResponse = "You should not eat " + data.food + " it overloads your diet."
-        }
-        responsiveVoice.speak(nutrifitResponse, "UK English Female");
-        messagesRef.push({
-            name: "Crystal",
-            text: nutrifitResponse
-        });
-        break;
-
-      case 'Food_toeat':
-        op();
-        if (returnFood == "") {
-            nutrifitResponse = "There are no recommended foods."
-            $("#crystalSuggest").text("" + returnFood);
-
-        } else {
-            nutrifitResponse = "You should eat" + returnFood;
-        }
-        responsiveVoice.speak(nutrifitResponse, "UK English Female");
-        returnFood = "";
-        messagesRef.push({
-            name: "Crystal",
-            text: nutrifitResponse
-        });
-        break;
-      }
+                var text = "";
+                // MICROPHONE RECOGNITION
+                var recognizer = new window.SpeechRecognition();
+                recognizer.continuous = false;
+                recognizer.onresult = function(event) {
+                    for (var i = event.resultIndex; i < event.results.length; i++) {
+                        if (event.results[i].isFinal) {
+                            text = event.results[i][0].transcript;
+                        } else {
+                            text += event.results[i][0].transcript;
+                        }
+                    }
+                    var userVoiceInput = text.toLowerCase();
+                    if (userVoiceInput == 'hey shirley') {
+                        say("Yes?");
+                        callNutriFit();
+                    } else if (userVoiceInput == 'exit') {
+                        stayloop = 0;
+                    }
+                }
+                recognizer.onerror = function(error) {
+                    console.log(error);
+                    say("Sorry, I didn't quite get that.");
+                };
+                try {
+                    recognizer.start();
+                } catch (ex) {
+                    console.log(ex.message);
+                }
+            }
+        }, 3000);
     }
-  });
+}
+
+callNutriFit = function(userVoiceInput, param) {
+  responsiveVoice.cancel();
+    console.log("Calling NutriFit AI");
+    var logData = {};
+    var nutrifitResponse;
+
+    var userInput = userVoiceInput;
+
+    if (userInput == null) {
+        setTimeout(function() {
+            window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+            if (window.SpeechRecognition == null) {
+                console.log('empty');
+            } else {
+
+                var text = "";
+                // MICROPHONE RECOGNITION
+                var recognizer = new window.SpeechRecognition();
+                recognizer.continuous = false;
+                recognizer.onresult = function(event) {
+
+                    for (var i = event.resultIndex; i < event.results.length; i++) {
+                        if (event.results[i].isFinal) {
+                            text = event.results[i][0].transcript;
+                        } else {
+                            text += event.results[i][0].transcript;
+                        }
+                    }
+                    var userInput = text.toLowerCase();
+                    if (userInput == 'hey shirley') {
+                        say("Yes?");
+                        callNutriFit();
+                    }
+                }
+                recognizer.onerror = function(error) {
+                    console.log(error);
+                    say("Sorry, I didn't quite get that.");
+                };
+                try {
+                    recognizer.start();
+                } catch (ex) {
+                    console.log(ex.message);
+                }
+            }
+        }, 1000);
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/",
+        data: {
+            input: userInput
+        },
+        success: function(data) {
+            console.log(data);
+            switch (param) {
+                case "getAge":
+                    age = parseInt(splitScript[splitScript.length - 1]);
+                    if (age == undefined) {
+                        age = 30;
+                    }
+                    break;
+                case 'Food_eaten':
+                    nutrifitResponse = "Great, I added that you have eaten " + data.number + data.food + " to your log";
+                    say();
+                    console.log("" + data.food);
+                    var key = dataset[("" + data.food)];
+                    console.log(dataset[("" + data.food)]);
+                    prot += key["Protein"]
+                    fat += key["Lipid_Tot"];
+                    carb += key["Carbohydrt"];
+                    calc();
+                    logData.food = data.food;
+                    logData.count = data.number;
+                    logData.date = new Date();
+                    log.push(logData);
+                    $("#calories").text(cal_eaten);
+                    messagesRef.push({
+                        name: "Shirley",
+                        text: nutrifitResponse
+                    });
+                    break;
+                case 'Food_option':
+                    if (caloriesShould(("" + data.food))) {
+                        nutrifitResponse = "Great, you should eat " + data.food;
+                    } else {
+                        nutrifitResponse = "You should not eat " + data.food + " it overloads your diet."
+                    }
+                    responsiveVoice.speak(nutrifitResponse, "UK English Female");
+                    messagesRef.push({
+                        name: "Shirley",
+                        text: nutrifitResponse
+                    });
+                    break;
+
+                case 'Food_toeat':
+                    op();
+                    if (returnFood == "") {
+                        nutrifitResponse = "There are no recommended foods."
+                        $("#shirleySuggest").text("" + returnFood);
+
+                    } else {
+                        nutrifitResponse = "You should eat" + returnFood;
+                    }
+                    responsiveVoice.speak(nutrifitResponse, "UK English Female");
+                    returnFood = "";
+                    messagesRef.push({
+                        name: "Shirley",
+                        text: nutrifitResponse
+                    });
+                    break;
+            }
+        }
+    });
 }
 
 var messagesRef;
@@ -183,24 +527,39 @@ var nameField = $('#nameInput');
 var messageList = $('#messages');
 var key;
 
+getFrom = function(url) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: function(data) {
+            return data;
+        }
+    });
+}
+
+var userData;
+
 //Firebase
 // CREATE A REFERENCE TO FIREBASE
 init_firebase = function(username) {
     console.log(username);
     $("#username").text(username);
     messagesRef = new Firebase('https://nutrifit.firebaseio.com/' + username);
-    console.log("Attempted to connect to https://nutrifit.firebaseio.com/" + username);
+    eventsRef = new Firebase('https://nutrifit.firebaseio.com/' + username + '/events/');
+    console.log("Attempted to connect to https://nutrifit.firebaseio.com/" + username + ' and /'+username+'/events/');
     messagesRef.push({
         name: "NutriFit",
-        text: "Hi " + currentUser + ", it's nice to see you!"
+        text: "Hi " + username + ", it's nice to see you!"
     });
     messagesRef.push({
         name: "NutriFit",
         text: "Say Things Like 'I ate a cheeseburger', 'Should I eat roast pork?', 'What should I eat?', 'NutriFit, give me my log'"
     });
 
-    $("#calories").text(cal_eaten);
-    $("#nutrifitSuggest").text("messagesRef".nutrifitSuggest);
+    userData = getFrom('https://nutrifit.firebaseio.com/' + username + '/.json');
+
+    // $("#calories").text(userData.caloriesBurned);
+    // $("#nutrifitSuggest").text("messagesRef".nutrifitSuggest);
 
     // Add a callback that is triggered for each chat message.
     messagesRef.limitToLast(10).on('child_added', function(snapshot) {
@@ -228,7 +587,7 @@ init_firebase = function(username) {
 
     removeMessage = function(key) {
         if (window.confirm("Are you sure you want to delete this message?")) {
-            var keyRef = new Firebase('https://nutrifit.firebaseio.com/john' + key);
+            var keyRef = new Firebase('https://nutrifit.firebaseio.com/' + user.name + key);
             keyRef.remove();
             $("#" + key).hide();
         }
