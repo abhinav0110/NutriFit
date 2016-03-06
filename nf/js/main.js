@@ -80,7 +80,7 @@ startCoach = function() {
     $("#bg").addClass("blurred");
 
     // setTimeout(function(){
-    	say("Hello! My name is Crystal and I will be your coach. What is your name?");
+    	say("Hello! I am NutriFit and I will keep you healthy. What is your name?");
     // }, 1000);
 
     setTimeout(function() {
@@ -187,8 +187,8 @@ getVoice = function() {
                           var logData = {};
                           switch (data.intent) {
 
-                              case 'RepWorkout':
-                              		crystalresponse = "Great, I added " + data.number + data.activity + " to your log";
+                              case 'Food_eaten':
+                              	 crystalresponse = "Great, I added that you have eaten " + data.number + data.activity + " to your log";
                                   responsiveVoice.speak(crystalresponse, "UK English Female");
                                   caloriesBurn = caloriesRep(caloriesBurn,data.number);
                                   logData.activity = data.activity;
@@ -200,18 +200,8 @@ getVoice = function() {
 											                text: crystalresponse
 											            });
                                   break;
-                              case 'TimeBaseWorkouts':
-                                   
-                                  if(data.duration.unit == 's'){
-                                      unit = "seconds";
-                                  }
-                                  else if(data.duration.unit == 'min'){
-                                      unit = "minutes"
-
-                                  }
-                                  else{
-                                      unit = "hours"
-                                  }
+                              case 'Food_option':
+                                  /* Change so that it is dependent on whether calories option return true or false 
                                   crystalresponse = "Great, I added " + data.activity + "for" + data.duration.amount +unit+ " to your log";
                                   responsiveVoice.speak(crystalresponse , "UK English Female");
                                   caloriesBurn = caloriesTime(caloriesBurn,data.duration.amount);
@@ -222,18 +212,18 @@ getVoice = function() {
                                   messagesRef.push({
 											                name: "Crystal",
 											                text: crystalresponse
-											            });
+											            });*/
                                   break;
 
-                              case 'caloriesCount':
-                              		crystalresponse = "You burn " + caloriesBurn + "calories";
+                              case 'Food_toeat': /* dependent on what food is returned
+                              		crystalresponse = "You should eat" + caloriesShould(insertname);
                                   responsiveVoice.speak(crystalresponse, "UK English Female");
                                   messagesRef.push({
 											                name: "Crystal",
 											                text: crystalresponse
-											            });
+											            }); */
                                   break;
-                             case 'scheduler':
+                             case 'Print_log':/* Implement log printing for doctors
                                     var catString = leanSchedule[0].time +" "+ leanSchedule[0].activity +".";
                                     for(var i = 1; i < leanSchedule.length; i++){
                                       catString =  catString+leanSchedule[i].time +" "+ leanSchedule[i].activity +".";
@@ -254,7 +244,7 @@ getVoice = function() {
 											                name: "Crystal",
 											                text: "Sorry I didn't get that"
 											            });
-                                  responsiveVoice.speak("Sorry I didn't get dat" , "UK English Female");
+                                  responsiveVoice.speak("Sorry I didn't get dat" , "UK English Female"); */
                                   break;
                           }
                       }

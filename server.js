@@ -43,6 +43,9 @@ app.post('/', function (req, res) {
 	else if(objects.Food_toeat != undefined){
 		textResponse.activity = objects.Food_toeat;
 	}
+	else if(objects.Food_log != undefined){
+		textResponse.activity = objects.Food_log;
+	}
 		textResponse.intent = response.result.action;
 		console.log("send: " +response.result.action);
 	});
