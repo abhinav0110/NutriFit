@@ -1,64 +1,22 @@
 // Instantiation of various vars
-var unit = "", name = "", age = 0, gender = "", weight = 0, exer = 0, fat = 0.0, prot = 0.0, carb = 0.0, c = 1, cal = 0.0, min = 0.0, per_fat = 0.0, per_carb = 0.0, per_prot = 0.0, cal_eaten = 0.0, returnFood = "";
+var unit = "",
+    name = "",
+    age = 0,
+    gender = "",
+    weight = 0,
+    exer = 0,
+    fat = 0.0,
+    prot = 0.0,
+    carb = 0.0,
+    c = 1,
+    cal = 0.0,
+    min = 0.0,
+    per_fat = 0.0,
+    per_carb = 0.0,
+    per_prot = 0.0,
+    cal_eaten = 0.0,
+    returnFood = "";
 
-
-fitnessCoach = function() {
-
-    // setTimeout(function(){
-    say("How active are you on a scale of 1 to 3, where 3 is super active?");
-    // }, 1000);
-
-    setTimeout(function() {
-        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-        if (window.SpeechRecognition == null) {
-            console.log('empty');
-        } else {
-            var recognizer = new window.SpeechRecognition();
-            recognizer.continuous = false;
-            var text;
-            var name;
-            recognizer.onresult = function(event) {
-                for (var i = event.resultIndex; i < event.results.length; i++) {
-                    if (event.results[i].isFinal) {
-                        text = event.results[i][0].transcript;
-                    } else {
-                        text += event.results[i][0].transcript;
-                    }
-                }
-                var splitScript = event.results[0][0].transcript.split(" ");
-                console.log(text);
-                $.ajax({
-                    type: "POST",
-                    url: "/",
-                    data: {
-                        input: text
-                    },
-                    success: function(data) {
-                        console.log(data);
-                        var logData = {};
-                        exer = 2;
-                        say("I have updated your fitness");
-
-                        setCal();
-                        if (cal == undefined){
-                            cal = 2000.0;
-                        }
-                        break;
-                    }
-                });
-
-            };
-            recognizer.onerror = function(error) {
-                console.log(error);
-            };
-            try {
-                recognizer.start(); // SUCCESS
-            } catch (ex) {
-                console.log(ex.message);
-            }
-        }
-    }, 4800);
-}
 
 var setCal = function() {
     if (gender == "Male") {
@@ -275,9 +233,9 @@ reqUserInfo = function(reqParam) {
                 // Get user name
                 if (reqParam == "getName") {
                     console.log("Getting username...");
-                    user.name = splitScript[splitScript.length - 1];
-                    say("Hey there " + user.name + "!");
-                    init_firebase(user.name);
+                    name = splitScript[splitScript.length - 1];
+                    say("Hey there " + name + "!");
+                    init_firebase(name);
                     // Check database if user sessions are greater than 1 here
 
                     say("What is your gender?");
@@ -290,13 +248,13 @@ reqUserInfo = function(reqParam) {
                 else if (reqParam == "getGender") {
                     console.log("Getting user gender...");
                     if (userVoiceInput == 'male' || userVoiceInput == 'mail')
-                      user.gender = 'male';
+                        gender = 'male';
                     else if (userVoiceInput == 'female')
-                      user.gender = 'female';
+                        gender = 'female';
                     else
-                      user.gender = 'other';
-                    say("Okay, got it - you are " + user.gender);
-                    $("#gender").text(user.gender);
+                        gender = 'other';
+                    say("Okay, got it - you are " + gender);
+                    $("#gender").text(gender);
                     say("How many pounds do you weight?");
                     setTimeout(function() {
                         reqUserInfo("getWeight");
@@ -309,22 +267,23 @@ reqUserInfo = function(reqParam) {
                     console.log(splitScript[0] + " -> " + weight);
                     console.log("Getting user weight...");
                     if (userVoiceInput.indexOf('i don\'t know') >= 0) {
-                        user.weight = 150;
+                        weight = 150;
                         say("Okay, let's just say you're 150 pounds then.");
                     } else if (weight <= 0 || weight >= 1000) {
-                        user.weight = 150;
+                        weight = 150;
                         say("Okay, let's just say you're 150 pounds.");
                     } else {
-                        user.weight = weight;
-                        // user.weight = callNutriFit("getWeight");
+                        weight = weight;
+                        // weight = callNutriFit("getWeight");
                         if (userVoiceInput.indexOf('kilograms')) {
                             systemUse = "metric";
                         } else {
                             systemUse = "imperial";
                         }
-                        say("Okay, got it - you weigh " + user.weight + " pounds.");
+                        say("Okay, got it - you weigh " + weight + " pounds.");
+
                     }
-                    $("#weight").text(user.weight + " lbs.");
+                    $("#weight").text(weight + " lbs.");
                     say("How many years old are you?");
                     setTimeout(function() {
                         reqUserInfo("getAge");
@@ -334,11 +293,19 @@ reqUserInfo = function(reqParam) {
                 // Get user age
                 else if (reqParam == "getAge") {
                     console.log("Getting user age...");
-                    // user.age = callNutriFit("getAge");
-                    user.age = splitScript[0];
-                    $("#age").text(user.age);
-                    say("Okay, got it - you are " + user.age + " years old.");
+                    // age = callNutriFit("getAge");
+                    age = splitScript[0];
+                    $("#age").text(age);
+                    say("Okay, got it - you are " + age + " years old.");
+                    say("On a scale of 1 to 3, how much do you exercise?");
+                    setTimeout(function() {
+                        reqUserInfo("getExer");
+                    }, 5000);
+                } else if (reqParam == "getExer") {
+                    console.log("Getting user exercise level...");
+                    exer = splitScript[0];
                     say("Alright, I have saved your information!");
+                    setCal();
                 }
 
                 // Catch alien calls
@@ -403,6 +370,126 @@ beginLoop = function() {
     }
 }
 
+callNutriFit = function() {
+    // var foo=new Sound("./res/boop.mp3",100,true);
+    // foo.start();
+    // foo.stop();
+    // foo.start();
+    // foo.init(2000,false);
+    // foo.remove();
+
+    setTimeout(function() {
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+        if (window.SpeechRecognition == null) {
+            console.log('empty');
+        } else {
+            var recognizer = new window.SpeechRecognition();
+            recognizer.continuous = false;
+            var text;
+            recognizer.onresult = function(event) {
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        text = event.results[i][0].transcript;
+                    } else {
+                        text += event.results[i][0].transcript;
+                    }
+                }
+                console.log(text);
+                messagesRef.push({
+                    name: name,
+                    text: text
+                });
+                var shirleyresponse;
+                console.log("here")
+                $.ajax({
+                    type: "POST",
+                    url: "/",
+                    data: {
+                        input: text
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        var logData = {};
+                        switch (data.intent) {
+
+                            case 'Food_eaten':
+                                shirleyresponse = "Great, I added that you have eaten " + data.number + data.food + " to your log";
+                                responsiveVoice.speak(shirleyresponse, "UK English Female");
+                                console.log("" + data.food);
+                                var key2 = dataset[("" + data.food)];
+                                console.log(dataset[("" + data.food)]);
+                                prot += key2["Protein"]
+                                fat += key2["Lipid_Tot"];
+                                carb += key2["Carbohydrt"];
+                                calc();
+                                logData.food = data.food;
+                                logData.count = data.number;
+                                logData.date = new Date();
+                                log.push(logData);
+                                $("#calorie_cntr").text(cal_eaten);
+                                $("#fat_cntr").text(fat);
+                                $("#protein_cntr").text(prot);
+                                $("#carb_cntr").text(carb);
+                                messagesRef.push({
+                                    name: "shirley",
+                                    text: shirleyresponse
+                                });
+                                break;
+                            case 'Food_option':
+                                if (caloriesShould(("" + data.food))) {
+                                    shirleyresponse = "Great, you should eat " + data.food;
+                                } else {
+                                    shirleyresponse = "You should not eat " + data.food + " it overloads your diet."
+                                }
+                                responsiveVoice.speak(shirleyresponse, "UK English Female");
+                                messagesRef.push({
+                                    name: "shirley",
+                                    text: shirleyresponse
+                                });
+                                break;
+
+                            case 'Food_toeat':
+                                op();
+                                if (returnFood == "") {
+                                    shirleyresponse = "There are no recommended foods."
+                                    $("#shirleySuggest").text("" + returnFood);
+
+                                } else {
+                                    shirleyresponse = "You should eat" + returnFood;
+                                }
+                                responsiveVoice.speak(shirleyresponse, "UK English Female");
+                                returnFood = "";
+                                messagesRef.push({
+                                    name: "shirley",
+                                    text: shirleyresponse
+                                });
+                                break;
+                            case 'Print_log':
+                              console.log("Printing log...");
+                                break;
+                        }
+                    }
+                });
+
+            };
+            recognizer.onerror = function(error) {
+                console.log(error);
+            };
+            try {
+                recognizer.start(); // SUCCESS
+            } catch (ex) {
+                console.log(ex.message);
+            }
+        }
+    }, 500);
+    $("#calorie_cntr").text(cal_eaten);
+    $("#fat_cntr").text(fat);
+    $("#protein_cntr").text(prot);
+    $("#carb_cntr").text(carb);
+}
+
+
+/**
 callNutriFit = function(userVoiceInput, param) {
   responsiveVoice.cancel();
     console.log("Calling NutriFit AI");
@@ -518,6 +605,7 @@ callNutriFit = function(userVoiceInput, param) {
         }
     });
 }
+**/
 
 var messagesRef;
 
@@ -546,7 +634,7 @@ init_firebase = function(username) {
     $("#username").text(username);
     messagesRef = new Firebase('https://nutrifit.firebaseio.com/' + username);
     eventsRef = new Firebase('https://nutrifit.firebaseio.com/' + username + '/events/');
-    console.log("Attempted to connect to https://nutrifit.firebaseio.com/" + username + ' and /'+username+'/events/');
+    console.log("Attempted to connect to https://nutrifit.firebaseio.com/" + username + ' and /' + username + '/events/');
     messagesRef.push({
         name: "NutriFit",
         text: "Hi " + username + ", it's nice to see you!"
@@ -587,7 +675,7 @@ init_firebase = function(username) {
 
     removeMessage = function(key) {
         if (window.confirm("Are you sure you want to delete this message?")) {
-            var keyRef = new Firebase('https://nutrifit.firebaseio.com/' + user.name + key);
+            var keyRef = new Firebase('https://nutrifit.firebaseio.com/' + name + key);
             keyRef.remove();
             $("#" + key).hide();
         }
