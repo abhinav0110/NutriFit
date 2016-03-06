@@ -29,11 +29,27 @@ app.post('/', function(req, res) {
     request.on('response', function(response) {
       console.log(response);
 
-      var objects = response.result.parameters;
-      if(objects.Food == undefined)
-      	console.log("Error!");
+      // Stores Parameters Received from API.AI
+      var params = response.result.parameters;
+      if(params.Food != undefined){	// If Food is Defined...
+      	console.log("Successfully identified food!"); // State success
+      	console.log(params.Food);	// Print out Detected Food
+      	textResponse.food = params.Food;	// Push Food data to food variable in return response to end user
+      	textResponse.number = params.number; // Push number of food data to number variable in return response to end user
+      }
+
+      // Stores Action Parsed by API.AI from User Input String
+      var action = response.result.action;
+      if(action != undefined)	// If action is Defined...
+      	console.log("Intent Successfully Registered: " + action); // State success
+      if(action == "Food_eaten") // If action was 'Food_eaten'
+      	textResponse.intent = "Food_eaten";	// Push respective action to textResponse to end user
+      else if (action == "Food_option")
+      	textResponse.intent = "Food_option";	// Same with this
+      else if (action == "Food_toeat")
+      	textResponse.intent = "Food_toeat";	// Same with this
       else
-      	console.log(objects.Food);
+      	console.log("Intent Registration Unsuccessful! :(");
 
         // var objects = response.result.parameters;
         // if (response.intent == "Food_eaten") {
@@ -69,7 +85,7 @@ app.post('/', function(req, res) {
         console.log(textResponse);
         res.json(textResponse);
 
-    }, 1000);
+    }, 2000);
 
 });
 

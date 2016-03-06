@@ -718,6 +718,26 @@ say = function(speech) {
     responsiveVoice.speak(speech, "UK English Female");
 }
 
+test = function(){
+  $.ajax({
+    type: "POST",
+    url: "/",
+    data: {
+        input: "I ate a cheeseburger"
+    },
+    success: function(data) {
+      console.log(data);
+      var logdata = {};
+      switch (data.intent) {
+        case 'Food_eaten' :
+          console.log(data.intent + " : " + data.food);
+          break;
+        default :
+          console.log("End.");
+      }
+    }
+  });
+}
 
 getVoice = function() {
     // var foo=new Sound("./res/boop.mp3",100,true);
