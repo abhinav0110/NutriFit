@@ -81,13 +81,13 @@ function calc() //function gets called every time user says a food article
 }
 
 function op() {
-    for (var key in dataset) {
+    for (key in dataset) {
         if (per_fat < .28) {
             //Print eat more fat
             var val = (.30 - per_fat);
             var Eat = val * cal;
             //Display to screen Eat
-            if (key["Energ_Kcal"] <= Eat) {
+            if (dataset[key]["Energ_Kcal"] <= Eat) {
                 returnFood = key;
                 break;
             }
@@ -109,7 +109,7 @@ function op() {
             //print eat more prot
             var val = (0.20 - per_prot);
             var Eat1 = val * cal;
-            if (key["Energ_Kcal"] <= Eat) {
+            if (dataset[key]["Energ_Kcal"] <= Eat) {
                 returnFood = key;
                 break;
             }
@@ -119,7 +119,7 @@ function op() {
             var val = (0.50 - per_carb);
             var Eat2 = val * cal;
             //Display to screen Eat
-            if (key["Energ_Kcal"] <= Eat) {
+            if (dataset[key]["Energ_Kcal"] <= Eat) {
                 returnFood = key;
                 break;
             }
@@ -132,7 +132,7 @@ function op() {
         }
 
     }
-    returnFood = "";
+
 }
 
 
@@ -693,52 +693,31 @@ fitnessCoach = function() {
     }, 4500);
 }
 
-intialize = function() {
-
-    startCoach();
-    setTimeout(function() {
-        console.log("pause")
-    }, 6000)
-    genderCoach();
-    setTimeout(function() {
-        console.log("pause")
-    }, 6000)
-    ageCoach();
-    setTimeout(function() {
-        console.log("pause")
-    }, 6000)
-    weightCoach();
-    setTimeout(function() {
-        console.log("pause")
-    }, 6000)
-    fitnessCoach();
-}
-
 say = function(speech) {
     responsiveVoice.speak(speech, "UK English Female");
 }
 
-test = function(stuff){
-  if(stuff == undefined)
-    stuff = "I ate a cheeseburger";
-  $.ajax({
-    type: "POST",
-    url: "/",
-    data: {
-        input: stuff
-    },
-    success: function(data) {
-      console.log(data);
-      var logdata = {};
-      switch (data.intent) {
-        case 'Food_eaten' :
-          console.log(data.intent + " : " + data.food);
-          break;
-        default :
-          console.log("End.");
-      }
-    }
-  });
+test = function(stuff) {
+    if (stuff == undefined)
+        stuff = "I ate a cheeseburger";
+    $.ajax({
+        type: "POST",
+        url: "/",
+        data: {
+            input: stuff
+        },
+        success: function(data) {
+            console.log(data);
+            var logdata = {};
+            switch (data.intent) {
+                case 'Food_eaten':
+                    console.log(data.intent + " : " + data.food);
+                    break;
+                default:
+                    console.log("End.");
+            }
+        }
+    });
 }
 
 getVoice = function() {
@@ -790,12 +769,12 @@ getVoice = function() {
                                 responsiveVoice.speak(crystalresponse, "UK English Female");
                                 console.log("" + data.food);
                                 var key2 = dataset[("" + data.food)];
-                                console.log(dataset[("" + data.food)]);                              
+                                console.log(dataset[("" + data.food)]);
                                 prot += key2["Protein"]
                                 fat += key2["Lipid_Tot"];
                                 carb += key2["Carbohydrt"];
                                 calc();
-                                logData.activity = data.activity;
+                                logData.food = data.food;
                                 logData.count = data.number;
                                 logData.date = new Date();
                                 log.push(logData);
@@ -1021,7 +1000,7 @@ var dataset = {
         "Sodium": 292,
         "Cholestrl": 87,
     },
-    "apple": {
+    "apples": {
         "Energ_Kcal": 52,
         "Protein": 0.26,
         "Lipid_Tot": 0.17,
@@ -1030,7 +1009,7 @@ var dataset = {
         "Sodium": 1,
         "Cholestrl": 0,
     },
-    "banana": {
+    "bananas": {
         "Energ_Kcal": 89,
         "Protein": 1.09,
         "Lipid_Tot": 0.33,
@@ -1083,5 +1062,68 @@ var dataset = {
         "Sugar_Tot": 0,
         "Sodium": 60,
         "Cholestrl": 94,
+    },
+    "sausage": {
+        "Energ_Kcal": 346,
+        "Protein": 14.25,
+        "Lipid_Tot": 31.33,
+        "Carbohydrt": 0.65,
+        "Sugar_Tot": 0,
+    },
+    "ham": {
+        "Energ_Kcal": 245,
+        "Protein": 17,
+        "Lipid_Tot": 19,
+        "Carbohydrt": 0,
+        "Sugar_Tot": 0,
+    },
+    "milk": {
+        "Energ_Kcal": 48,
+        "Protein": 3.93,
+        "Lipid_Tot": 1.17,
+        "Carbohydrt": 5.52,
+        "Sugar_Tot": 0,
+    },
+    "egg": {
+        "Energ_Kcal": 317,
+        "Protein": 15.86,
+        "Lipid_Tot": 26.54,
+        "Carbohydrt": 3.59,
+        "Sugar_Tot": 0.56,
+    },
+    "soup": {
+        "Energ_Kcal": 36,
+        "Protein": 2.52,
+        "Lipid_Tot": 1.2,
+        "Carbohydrt": 3.53,
+        "Sugar_Tot": 1.58,
+    },
+    "doughnut": {
+        "Energ_Kcal": 452,
+        "Protein": 4.93,
+        "Lipid_Tot": 25.25,
+        "Carbohydrt": 51.33,
+        "Sugar_Tot": 26.65,
+    },
+    "muffin": {
+        "Energ_Kcal": 276,
+        "Protein": 8.87,
+        "Lipid_Tot": 2.21,
+        "Carbohydrt": 55.04,
+        "Sugar_Tot": 13.34,
+    },
+    "cookies": {
+        "Energ_Kcal": 384,
+        "Protein": 3.8,
+        "Lipid_Tot": 11.1,
+        "Carbohydrt": 71.3,
+        "Sugar_Tot": 0.09,
+    },
+    "waffles": {
+        "Energ_Kcal": 285,
+        "Protein": 6.47,
+        "Lipid_Tot": 9.7,
+        "Carbohydrt": 42.98,
+        "Sugar_Tot": 4.91,
     }
 };
