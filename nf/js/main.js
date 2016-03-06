@@ -3,15 +3,26 @@ $(document).ready(function() {
 });
 var unit;
 
-var caloriesRep = function(calories,reps){
-        calories = (reps/5)+calories;
-        return calories;
+var caloriesNeeded = function(neededcalories, calories, 
+			      neededfat, fat, 
+			      neededprotein, protein, 
+			      neededcarbs, carbs){
+        calories = neededcalories - calories;
+	fat = neededfat - fat;
+	protein = neededprotein - protein;
+	carbs = needed carbs - carbs;
+	return true;
 }
 
-var caloriesTime = function(calories,time){
-    calories = (time * 5) + calories;
-    return calories;
+var caloriesOption = function(calories){
+	
+	return true;
 }
+
+var caloriesShould = function(calories, food){
+	return true;
+}
+
 
 // var name;
 
