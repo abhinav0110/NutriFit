@@ -1,47 +1,99 @@
 <!DOCTYPE html>
 <html lang="en" class="no-js">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-		<meta name="viewport" content="width=device-width, initial-scale=1"> 
-		<title>NutriFit</title>
-		<meta name="description" content="Inspiration for Article Intro Effects" />
-		<meta name="keywords" content="title, header, effect, scroll, inspiration, medium, web design" />
-		<meta name="author" content="Codrops" />
-		<link rel="shortcut icon" href="../favicon.ico">
-		<link rel="stylesheet" type="text/css" href="css/normalize.css" />
-		<link rel="stylesheet" type="text/css" href="css/demo.css" />
-		<link rel="stylesheet" type="text/css" href="css/component.css" />
-		<!--[if IE]>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>NutriFit</title>
+
+    <link rel="shortcut icon" href="./img/logo.png">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="css/demo.css" />
+    <link rel="stylesheet" href="./css/mbox.css" />
+    <link rel="stylesheet" type="text/css" href="css/component.css" />
+    <!--[if IE]>
   		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-	</head>
-	<body class="demo-5">
-		<div id="container" class="container intro-effect-sidefixed">
-			<header class="header">
-				<div class="bg-img"><img src="img/bg-min.jpg" alt="Background Image" /><div class="bg-overlay"></div></div>
-			</header>
-			<button class="trigger" data-info="Start Your Experience"><span>Trigger</span></button>
-			<article class="content">
-				<div class="title">
-					<h1>NutriFit</h1>
-					<h3>Your Personal Nutritionist and Health Advisor</h3>
-					<br>	
-				</div>
-				<div>
-					<p>We may define a food to be any substance which will repair the functional waste of the body, increase its growth, or maintain the heat, muscular, and nervous energy. </p>
-				</div>
-			</article>
-			<section class="related">
-				<p>If you enjoyed these effects you might also like:</p>
-				<div><a href="http://tympanus.net/Development/HeaderEffects/"><h4>On Scroll Header Effects</h4></a></div>
-				<div><a href="http://tympanus.net/Tutorials/MediumStylePageTransition/"><h4>Medium-Style Page Transitions</h4></a></div>
-			</section>
-		</div><!-- /container -->
-		<script src="js/classie.js"></script>
-		<script>
-		</script>
-	</body>
+</head>
+
+<body class="demo-5">
+    <div id="container" class="container intro-effect-sidefixed">
+        <header class="header">
+            <div class="bg-img">
+								<video autoplay  poster="" id="bgvid" loop>
+									<!-- WCAG general accessibility recommendation is that media such as background video play through only once. Loop turned on for the purposes of illustration; if removed, the end of the video will fade in the same way created by pressing the "Pause" button  -->
+									<source src="./resources/vid.mp4" type="video/mp4">
+								</video>
+		            <img src="./img/bg-go.jpg" alt="Background Image" />
+                <div class="bg-overlay"></div>
+            </div>
+        </header>
+
+        <div id="app">
+            <canvas id="demo-canvas"></canvas>
+            <div class="app-content container">
+                <!-- Body -->
+                <div class="row">
+                    <img class="talk-btn img-responsive" src="./img/mic.png" onclick="getVoice()" />
+                    <!-- CHAT -->
+                    <div class="col-md-2 col-md-offset-1">
+                        <div class="chatContainer">
+                            <h3>Your NutriFit Log</h3>
+                            <br>
+                            <div id="messageStore">
+                                <ul id='messages' class="messages"></ul>
+                            </div>
+                            <!-- <div class="chatInputFloat">
+                                <div class='chatInput'>
+                                    <label for="nameInput">Username: </label>
+                                    <input type='text' id='nameInput' placeholder='enter a username...'>
+                                </div>
+                                <footer>
+                                    <input type='text' id='messageInput' placeholder='Type a message...'>
+                                    <h5 onClick="removeAll()" style="cursor: pointer;background-color:#ddd;border-radius:10px;padding: 8px">Remove All Messages</h5>
+                                </footer>
+                            </div> -->
+                        </div>
+                    </div>
+                    <!-- CONTENT -->
+                    <div class="col-md-8" style="text-align: right">
+                        <h3>User</h3>
+                        <span id="username"></span>
+                        <h5>Today's Calorie Count</h5>
+                        <span id="calories"></span>
+                        <h5>NutriFit's Suggestion</h5>
+                        <span id="nfSuggest"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="trigger" data-info="Start Your Experience"><span>Trigger</span></button>
+        <article class="content">
+            <div class="title">
+                <h1>NutriFit.AI</h1>
+                <h3>Your Personal Nutritionist</h3>
+                <br>
+                <br>
+                <br>
+            </div>
+            <div>
+            	<p>Calorie Intake: <span id="calorie-cntr"></span></p>
+            	<p>Fat: <span id="fat-cntr"></span></p>
+            	<p>Protein: <span id="protein-cntr"></span></p>
+            	<p>Carbohydrates: <span id="carb-cntr"></span></p>
+	            <div id="chart" style="height: 250px"></div>
+            </div>
+        </article>
+    </div>
+    <!-- /container -->
+    <script src="./js/classie.js"></script>
+</body>
+
 </html>
 <!-- 
 Imported Scripts:
@@ -51,8 +103,12 @@ Imported Scripts:
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
 <script src='https://cdn.firebase.com/js/client/2.1.0/firebase.js'></script>
-
 <script src="./js/main.js"></script>
 <script src="./js/page-effects.js"></script>
+
+3 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+<script src="./js/graph.js"></script>
 
 </html>

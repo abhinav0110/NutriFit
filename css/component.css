@@ -34,6 +34,7 @@ html, body, .container, .header {
 
 .bg-img img {
 	position: absolute;
+	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 	top: 0;
@@ -312,7 +313,8 @@ button.trigger span::before {
 	position: absolute;
 	height: 100%;
 	width: 100%;
-	background-color: rgba(0, 255, 120, .5);
+	z-index: 4;
+	background-color: rgba(0, 255, 120, .8);
 }
 
 .intro-effect-sidefixed .title p {
@@ -443,36 +445,18 @@ button.trigger span::before {
 
 /* Media Queries */
 @media screen and (max-width: 47em) {
+
+	.bg-img img {
+		width: auto;
+		height: 100%;
+	}
+
 	.title, .content {
 		font-size: 70%;
 	}
 
-	.codrops-demos a {
-		font-size: 80%;
-	}
-
-	.intro-effect-side .title {
-		width: 100%;
-		padding: 0 1em;
-		-webkit-transform: translateY(-50%);
-		transform: translateY(-50%);
-	}
-
-	.intro-effect-side.modify .bg-img::before {
-		-webkit-transform: translateX(-100%);
-		transform: translateX(-100%);
-	}
-
-	.intro-effect-side .bg-img::after {
-		border-left-width: 0px;
-		border-right-width: 0px;
-		right: 0px;
-		left: 0px;
-		background: rgba(255,255,255,0.1);
-	}
-
-	.intro-effect-side.modify .bg-img::after {
-		background: rgba(255,255,255,0.8);
+	.intro-effect-sidefixed.modify .content {
+		display: none;
 	}
 
 	.intro-effect-sidefixed .content {
@@ -484,9 +468,14 @@ button.trigger span::before {
 		width: 95%;
 	}
 
+	#app{
+		width: 90%;
+	}
+
 }
 
 @media screen and (max-width: 27em) {
+
 	.intro-effect-jam3 .content {
 		padding: 0 2em 5em;
 	}

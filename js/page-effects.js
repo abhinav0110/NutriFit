@@ -105,8 +105,12 @@ function toggle( reveal ) {
 	
 	if( reveal ) {
 		classie.add( container, 'modify' );
+		$("#app").show("fast");
+		$("#bgvid").hide("fast");
 	}
 	else {
+		$("#bgvid").show("fast");
+		$("#app").hide("fast");
 		noscroll = true;
 		disable_scroll();
 		classie.remove( container, 'modify' );
