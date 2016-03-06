@@ -1,0 +1,236 @@
+<html>
+</html>
+
+<script>
+var userVoiceInput, name, age, gender, weight;
+
+function getVoice(field){
+    setTimeout(function() {
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+        if (window.SpeechRecognition == null) {
+            console.log('empty');
+        } else {
+            var recognizer = new window.SpeechRecognition();
+            recognizer.continuous = false;
+            var text;
+            recognizer.onresult = function(event) {
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        text = event.results[i][0].transcript;
+                    } else {
+                        text += event.results[i][0].transcript;
+                    }
+                }
+                if(field == "name")
+                    name = text;
+                else if (field == "age")
+                    age = text;
+                else if (field == "gender")
+                    gender = text;
+                else if (field == "weight")
+                    weight = text;
+            };
+            recognizer.onerror = function(error) {
+                console.log(error);
+            };
+            try {
+                recognizer.start(); // SUCCESS
+            } catch (ex) {
+                console.log(ex.message);
+            }
+        }
+    }, 100);
+}
+
+//get age, weight,sex
+//get Do you do any exercise? sedentary/light/ moderate/heavy
+var answer;
+var exer=0;
+if(answer=="light"){
+	exer=1;
+}
+if(answer=="moderate"){
+	exer=2;
+}
+if(answer=="sedentary"){
+	exer=0;
+}
+if(answer=="heavy"){
+	exer=3;
+}
+
+
+var cal=0;
+
+var min=0;
+
+if(sex==Male){
+	if(exer==0){min=1.3;}
+	else if(exer==1){min=1.6;}
+	else if(exer==2){min=1.7;}
+	else if(exer==3){min=2.1;}
+	if(age<3){
+		cal=60*min*weight-30;
+	}
+	
+	else if(age>=3 && age<10){
+		cal=23*min*weight+505
+	}
+
+	else if(age>=10 && age<18){
+		cal=18*min*weight+659;
+	}
+	else if(age>=18 && age<30){
+		cal=15*min*weight+692;
+	}
+	else if(age>=30 && age<60){
+		cal=11.4*min*weight+873;
+	}
+	else if(age>=60){
+        cal=11.7*min*weight+587;
+    }	
+}
+
+
+if(sex==Female){
+    if(exer==0){min=1.3;}
+    else if(exer==1){min=1.5;}
+    else if(exer==2){min=1.6;}
+    else if(exer==3){min=1.9;}
+    if(age<3){
+        cal=58*min*weight-31;
+    }
+    
+    else if(age>=3 && age<10){
+        cal=20*min*weight+485
+    }
+
+    else if(age>=10 && age<18){
+        cal=13*min*weight+692;
+    }
+    else if(age>=18 && age<30){
+        cal=15*min*weight+486;
+    }
+    else if(age>=30 && age<60){
+        cal=8*min*weight+845;
+    }
+    else if(age>=60){
+        cal=9*min*weight+658;
+    }   
+}
+
+var fat=0;
+var prot=0;
+var carb=0;
+var c=1;
+
+function calc() //function gets called every time user says a food article 
+{
+for(int i=0;i<every_tuple;i++){
+    if(count_from_voice!=1) {
+        c=count_from_voice;
+    }
+    
+    if(data.name==input_from_voice)
+    {   
+        cal_eaten+=c*(data.fat*9+data.prot*4+data.carb*4);
+        fat+=c*data.fat*9;
+        prot+=c*data.prot*4;
+        carb+=c*data.carb*4;
+    }
+}
+per_fat=(fat/cal_eaten);
+per_prot=(prot/cal_eaten);
+per_carb=(carb/cal_eaten);
+}
+
+function op()
+{   if(per_fat<.28){
+    //Print eat more fat
+       var val=(.30-per_fat);
+       var Eat=val*cal_eaten;
+       //Display to screen Eat 
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_fat>.32){
+        //print eat less fat
+    var val=(per_fat-0.30);
+       var Eat=val*cal_eaten;
+       //Display to screen Eat 
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_prot>.23){
+        //print eat less prot
+    var val=(per_prot-0.20);
+       var Eat1=val*cal_eaten;
+       //Display to screen Eat 
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat1){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_prot<.19){
+        //print eat more prot
+    var val=(0.20-per_prot);
+       var Eat1=val*cal_eaten;
+       //Display to screen Eat 
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat1){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_carb<.48){
+        //print eat more carb
+    var val=(0.50-per_carb);
+       var Eat2=val*cal_eaten;
+       //Display to screen Eat 
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat2){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if (per_carb>.51){
+        //print eat less carb
+    var val=(per_carb-0.50);
+       var Eat2=val*cal_eaten;
+       //Display to screen Eat 
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat2){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(cal_eaten>(cal+150)){
+        //Print difference cal_eaten-cal Eg. Eating x calories excess
+    }
+    if(cal_eaten>(cal-150)){
+        //Print difference cal_eaten-cal Eg. Eating x calories less
+    }
+       
+}
+
+
+</script>
