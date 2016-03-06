@@ -1,4 +1,8 @@
 $(document).ready(function(){
+  createGraph();
+});
+
+createGraph = function(){
   new Morris.Line({
     // ID of the element in which to draw the chart.
     element: 'chart',
@@ -19,4 +23,4 @@ $(document).ready(function(){
     // chart.
     labels: ['Value']
   });
-});
+}

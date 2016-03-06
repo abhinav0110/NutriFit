@@ -8,7 +8,7 @@
 
     <title>NutriFit</title>
 
-    <link rel="shortcut icon" href="./img/logo.png">
+    <link rel="shortcut icon" href="./img/mic.png">
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
@@ -40,7 +40,7 @@
                 <div class="row">
                     <img class="talk-btn img-responsive" src="./img/mic.png" onclick="getVoice()" />
                     <!-- CHAT -->
-                    <div class="col-md-2 col-md-offset-1">
+                    <div class="col-md-12">
                         <div class="chatContainer">
                             <h3>Your NutriFit Log</h3>
                             <br>
@@ -60,14 +60,14 @@
                         </div>
                     </div>
                     <!-- CONTENT -->
-                    <div class="col-md-8" style="text-align: right">
+                    <!-- <div class="col-md-8" style="text-align: right">
                         <h3>User</h3>
                         <span id="username"></span>
                         <h5>Today's Calorie Count</h5>
                         <span id="calories"></span>
                         <h5>NutriFit's Suggestion</h5>
                         <span id="nfSuggest"></span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -77,6 +77,9 @@
             <div class="title">
                 <h1>NutriFit.AI</h1>
                 <h3>Your Personal Nutritionist</h3>
+                <button class="btn" onclick="window.open('https://www.hackerearth.com/sprints/brickhack-ii/teams/9555d6b/')">The NutriFit Team</button>
+                <button class="btn" onclick="window.open('https://www.hackerearth.com/sprints/brickhack-ii/teams/9555d6b/')">Built With</button>
+                <button class="btn" onclick="window.open('https://github.com/davidbang/NutriFit')">View Source</button>
                 <br>
                 <br>
                 <br>
@@ -95,20 +98,16 @@
 </body>
 
 </html>
-<!-- 
-Imported Scripts:
-- jQuery
-- ResponsiveVoiceJS
- -->
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="http://code.responsivevoice.org/responsivevoice.js"></script>
-<script src='https://cdn.firebase.com/js/client/2.1.0/firebase.js'></script>
-<script src="./js/main.js"></script>
-<script src="./js/page-effects.js"></script>
+<!-- LIBRARIES -->
+<script src="https://code.jquery.com/jquery-2.1.4.min.js">/* jQuery 2.1.4 */</script>
+<script src="http://code.responsivevoice.org/responsivevoice.js">/* ResponsiveVoiceJS */</script>
+<script src='https://cdn.firebase.com/js/client/2.1.0/firebase.js'>/* Firebase */</script>
+3 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js">/* Raphael Graph */</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js">/* Morris Graph */</script>
 
-3 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-
-<script src="./js/graph.js"></script>
+<!-- CUSTOM SCRIPT -->
+<script src="./js/main.js">/* NutriFit Coach */</script>
+<script src="./js/page-effects.js">/* Scrolling Effect */</script>
+<script src="./js/graph.js">/* Graph Creator */</script>
 
 </html>

@@ -107,10 +107,12 @@ function toggle( reveal ) {
 		classie.add( container, 'modify' );
 		$("#app").show("fast");
 		$("#bgvid").hide("fast");
+		$(".title").hide("fast");
 	}
 	else {
 		$("#bgvid").show("fast");
 		$("#app").hide("fast");
+		$(".title").show("fast");
 		noscroll = true;
 		disable_scroll();
 		classie.remove( container, 'modify' );
