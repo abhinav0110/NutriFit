@@ -108,6 +108,7 @@ function toggle( reveal ) {
 		$("#app").show("fast");
 		$("#bgvid").hide("fast");
 		$(".title").hide("fast");
+		startCoach();
 	}
 	else {
 		$("#bgvid").show("fast");
