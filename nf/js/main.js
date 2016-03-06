@@ -3,6 +3,189 @@ $(document).ready(function() {
 });
 var unit;
 
+var name = "";
+var age = 0;
+var gender = "";
+var weight = 0;
+var exer = 0;
+var fat=0;
+var prot=0;
+var carb=0;
+var c=1;
+var cal=0;
+var min=0;
+var per_fat = 0;
+var per_carb = 0;
+var per_prot = 0;
+var cal_eaten = 0;
+var log = {};
+
+
+var setCal = function(){
+   if(gender==Male){
+        if(exer==0){min=1.3;}
+        else if(exer==1){min=1.6;}
+        else if(exer==2){min=1.7;}
+        else if(exer==3){min=2.1;}
+        if(age<3){
+                cal=60*min*weight-30;
+        }
+
+        else if(age>=3 && age<10){
+                cal=23*min*weight+505
+        }
+
+        else if(age>=10 && age<18){
+                cal=18*min*weight+659;
+        }
+        else if(age>=18 && age<30){
+                cal=15*min*weight+692;
+        }
+        else if(age>=30 && age<60){
+                cal=11.4*min*weight+873;
+        }
+        else if(age>=60){
+        cal=11.7*min*weight+587;
+        }
+    }   
+
+   else if(sex==Female){
+    if(exer==0){min=1.3;}
+    else if(exer==1){min=1.5;}
+    else if(exer==2){min=1.6;}
+    else if(exer==3){min=1.9;}
+    if(age<3){
+        cal=58*min*weight-31;
+    }
+    
+    else if(age>=3 && age<10){
+        cal=20*min*weight+485
+    }
+
+    else if(age>=10 && age<18){
+        cal=13*min*weight+692;
+    }
+    else if(age>=18 && age<30){
+        cal=15*min*weight+486;
+    }
+    else if(age>=30 && age<60){
+        cal=8*min*weight+845;
+    }
+    else if(age>=60){
+        cal=9*min*weight+658;
+    } 
+  }  
+}
+/*
+function calc() //function gets called every time user says a food article
+{
+  for(int i=0;i<every_tuple;i++){
+    if(count_from_voice!=1) {
+        c=count_from_voice;
+    }
+    
+    if(data.name==input_from_voice)
+    {   
+        cal_eaten+=c*(data.fat*9+data.prot*4+data.carb*4);
+        fat+=c*data.fat*9;
+        prot+=c*data.prot*4;
+        carb+=c*data.carb*4;
+    }
+  }
+  per_fat=(fat/cal_eaten);
+  per_prot=(prot/cal_eaten);
+  per_carb=(carb/cal_eaten);
+}
+
+function op()
+{   if(per_fat<.28){
+    //Print eat more fat
+       var val=(.30-per_fat);
+       var Eat=val*cal_eaten;
+       //Display to screen Eat
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_fat>.32){
+        //print eat less fat
+    var val=(per_fat-0.30);
+       var Eat=val*cal_eaten;
+       //Display to screen Eat
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat){
+            print data.name;
+            break;
+       }
+    }
+    }
+    if(per_prot>.23){
+        //print eat less prot
+    var val=(per_prot-0.20);
+       var Eat1=val*cal_eaten;
+       //Display to screen Eat
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat1){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_prot<.19){
+        //print eat more prot
+    var val=(0.20-per_prot);
+       var Eat1=val*cal_eaten;
+       //Display to screen Eat
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat1){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(per_carb<.48){
+        //print eat more carb
+    var val=(0.50-per_carb);
+       var Eat2=val*cal_eaten;
+       //Display to screen Eat
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat2){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if (per_carb>.51){
+        //print eat less carb
+    var val=(per_carb-0.50);
+       var Eat2=val*cal_eaten;
+       //Display to screen Eat
+    for(int i=0;i<every_tuple;i++){
+        //"Here are some suggestions"
+        if(data.cal==Eat2){
+            print data.name;
+            break;
+        }
+    }
+    }
+    if(cal_eaten>(cal+150)){
+        //Print difference cal_eaten-cal Eg. Eating x calories excess
+    }
+    if(cal_eaten>(cal-150)){
+        //Print difference cal_eaten-cal Eg. Eating x calories less
+    }
+
+}
+*/
+
 var caloriesNeeded = function(neededcalories, calories, 
 			      neededfat, fat, 
 			      neededprotein, protein, 
@@ -10,7 +193,7 @@ var caloriesNeeded = function(neededcalories, calories,
         calories = neededcalories - calories;
 	fat = neededfat - fat;
 	protein = neededprotein - protein;
-	carbs = needed carbs - carbs;
+	carbs = neededcarbs - carbs;
 	return true;
 }
 
@@ -71,6 +254,116 @@ var leanSchedule = [
 
 var currentUser;
 
+continueCoach = function(phrase, type){
+	say(phrase);
+
+    setTimeout(function() {
+        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+        if (window.SpeechRecognition == null) {
+            console.log('empty');
+        } else {
+            var recognizer = new window.SpeechRecognition();
+            recognizer.continuous = false;
+            var text;
+            var name;
+            recognizer.onresult = function(event) {
+                for (var i = event.resultIndex; i < event.results.length; i++) {
+                    if (event.results[i].isFinal) {
+                        text = event.results[i][0].transcript;
+                    } else {
+                        text += event.results[i][0].transcript;
+                    }
+                }
+                var splitScript = event.results[0][0].transcript.split(" ");
+                console.log(text);
+                $.ajax({
+                    type: "POST",
+                    url: "/",
+                    data: {
+                        input: text
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        //responsiveVoice.speak("You did " + data.number + data.activity, "UK English Female");
+                        //console.log(data.activity);
+                        var logData = {};
+                        switch (data.intent) {
+                            case 'name.save':
+				if (type == "gender"){
+                                   try{
+				       gender = splitScript[splitScript.length-1];
+				   }
+				  catch(err) {
+				       continueCoach("Please only say Male or Female", "gender");
+				   }
+				}
+				else if (type == "age"){
+				   try{
+					age = parseInt(splitScript[splitScript.length-1]);
+				   }
+				   catch(err){
+				       continueCoach("Please only say a number", "age");
+			           }
+				}
+				else if (type == "weight"){
+				   try{
+					weight = parseInt(splitScript[splitScript.length-1]);
+				   }
+				   catch(err){
+                                       continueCoach("Please only say a number", "weight");
+                                   }
+				}
+				else if (type == "fitness"){
+				   exer = 2;
+				}
+                                responsiveVoice.speak("I have updated your" + type, "UK English Female");
+                                break;
+                            default:
+                                if (type == "gender"){
+                                   try{
+                                       gender = splitScript[splitScript.length-1];
+                                   }
+                                  catch(err) {
+                                       continueCoach("Please only say Male or Female", "gender");
+                                   }
+                                }
+                                else if (type == "age"){
+                                   try{
+                                        age = parseInt(splitScript[splitScript.length-1]);
+                                   }
+                                   catch(err){
+                                       continueCoach("Please only say a number", "age");
+                                   }
+                                }       
+                                else if (type == "weight"){
+                                   try{
+                                        weight = parseInt(splitScript[splitScript.length-1]);
+                                   }
+                                   catch(err){
+                                       continueCoach("Please only say a number", "weight");
+                                   }
+                                }
+                                else if (type == "fitness"){
+                                   exer = 2;
+                                }
+                                responsiveVoice.speak("I have updated your" + type, "UK English Female");
+                                break;
+                        }
+                    }
+                });
+
+            };
+            recognizer.onerror = function(error) {
+                console.log(error);
+            };
+            try {
+                recognizer.start(); // SUCCESS
+            } catch (ex) {
+                console.log(ex.message);
+            }
+        }
+    }, 5500);
+}
 startCoach = function() {
     $("#intro").fadeOut();
     $("#app").fadeIn();
@@ -107,7 +400,7 @@ startCoach = function() {
                     url: "/",
                     data: {
                         input: text
-                    },
+                   },
                     success: function(data) {
                         console.log(data);
                         //responsiveVoice.speak("You did " + data.number + data.activity, "UK English Female");
@@ -118,12 +411,22 @@ startCoach = function() {
                                 currentUser = splitScript[splitScript.length-1];
                                 responsiveVoice.speak("Hi " + currentUser + ", it's nice to see you!", "UK English Female");
                                 init_firebase(currentUser);
-                                break;
+				continueCoach("May I ask what gender are you?", "gender");
+				continueCoach("How old are you?", "age");
+				continueCoach("How much do you weight?", "weight");
+				continueCoach("How active are you? Light, Moderate, Heavy?", "fitness");
+                                setCal();
+				break;
                             default:
                                 currentUser = splitScript[splitScript.length-1];
                                 responsiveVoice.speak("Hi " + currentUser + ", it's nice to see you!", "UK English Female");
                                 init_firebase(currentUser);
-                                break;
+                                continueCoach("May I ask what gender are you?", "gender");
+                                continueCoach("How old are you?", "age");
+                                continueCoach("How much do you weight?", "weight");
+                                continueCoach("How active are you? Light, Moderate, Heavy?", "fitness");
+                                setCal();
+				break;
                         }
                     }
                 });
@@ -184,7 +487,6 @@ getVoice = function() {
                           console.log(data);
                           //responsiveVoice.speak("You did " + data.number + data.activity, "UK English Female");
                           //console.log(data.activity);
-                          var logData = {};
                           switch (data.intent) {
 
                               case 'Food_eaten':
@@ -278,15 +580,15 @@ var key;
 init_firebase = function(username) {
     console.log(username);
     $("#username").text(username);
-    messagesRef = new Firebase('https://crystalcoach.firebaseio.com/' + username);
-    console.log("Attempted to connect to https://crystalcoach.firebaseio.com/" + username);
+    messagesRef = new Firebase('https://nutrifit.firebaseio.com/' + username);
+    console.log("Attempted to connect to https://nutrifit.firebaseio.com/" + username);
     messagesRef.push({
     	name: "Crystal",
     	text: "Hi " + currentUser + ", it's nice to see you!"
     });
     messagesRef.push({
-    	name: "Crystal",
-    	text: "Say 'I did 50 pushups', 'I ran for 5 minutes', 'Calories Burn', 'What should I do today?'"
+    	name: "NutriFit",
+    	text: "Say Things Like 'I ate a cheeseburger', 'Should I eat roast pork?', 'What should I eat?', 'NutriFit, give me my log'"
     });
 
     $("#calories").text(caloriesBurn);
