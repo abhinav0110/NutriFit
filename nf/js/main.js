@@ -376,7 +376,7 @@ startCoach = function() {
                 console.log(ex.message);
             }
         }
-    }, 3500);
+    }, 4000);
 }
 
 genderCoach = function() {
@@ -458,7 +458,7 @@ genderCoach = function() {
                 console.log(ex.message);
             }
         }
-    }, 3500);
+    }, 4000);
 }
 
 ageCoach = function() {
@@ -510,6 +510,9 @@ ageCoach = function() {
                             default:
                                 age = parseInt(splitScript[splitScript.length - 1]);
                                 responsiveVoice.speak("I have updated your age", "UK English Female");
+                                if (age == undefined){
+                                    age = 30;
+                                }
                                 weightCoach();
                                 /*setTimeout(function() { console.log("\n");}, 8000);
                                 setTimeout(continueCoach("May I ask what gender are you?", "gender"), 8000);
@@ -535,7 +538,7 @@ ageCoach = function() {
                 console.log(ex.message);
             }
         }
-    }, 3500);
+    }, 4000);
 }
 
 weightCoach = function() {
@@ -587,6 +590,9 @@ weightCoach = function() {
                             default:
                                 weight = parseInt(splitScript[splitScript.length - 1]);
                                 responsiveVoice.speak("I have updated your weight", "UK English Female");
+                                if (weight == undefined){
+                                    weight = 150.0;
+                                }
                                 fitnessCoach();
                                 /*setTimeout(function() { console.log("\n");}, 8000);
                                 setTimeout(continueCoach("May I ask what gender are you?", "gender"), 8000);
@@ -612,7 +618,7 @@ weightCoach = function() {
                 console.log(ex.message);
             }
         }
-    }, 3500);
+    }, 3800);
 }
 
 fitnessCoach = function() {
@@ -674,7 +680,11 @@ fitnessCoach = function() {
                                 setTimeout(function() { console.log("\n");}, 8000);
                                 setTimeout(continueCoach("How active are you? Light, Moderate, Heavy?", "fitness"), 5000);
                                 */
+
                                 setCal();
+                                if (cal == undefined){
+                                    cal = 2000.0;
+                                }
                                 break;
                         }
                     }
@@ -690,7 +700,7 @@ fitnessCoach = function() {
                 console.log(ex.message);
             }
         }
-    }, 4500);
+    }, 4800);
 }
 
 say = function(speech) {
@@ -852,7 +862,7 @@ getVoice = function() {
             }
         }
     }, 500);
-    updateCalories(caloriesBurn);
+    $("#calories").text(cal_eaten);
 }
 
 
@@ -1097,6 +1107,13 @@ var dataset = {
         "Lipid_Tot": 1.2,
         "Carbohydrt": 3.53,
         "Sugar_Tot": 1.58,
+    },
+    "hamburger": {
+        "Energ_Kcal": 346,
+        "Protein": 20.52,
+        "Lipid_Tot": 20.2,
+        "Carbohydrt": 20.53,
+        "Sugar_Tot": 3.58,
     },
     "doughnut": {
         "Energ_Kcal": 452,
