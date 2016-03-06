@@ -143,8 +143,8 @@ var caloriesOption = function(calories) {
 }
 
 var caloriesShould = function(food) {
-    var name = dataset["food"];
-    var cb = name.Energ_Kcal;
+    var name = dataset[food];
+    var cb = name["Energ_Kcal"];
     if (cal - cal_eaten - cb < 0) {
         return false;
     }
@@ -718,12 +718,14 @@ say = function(speech) {
     responsiveVoice.speak(speech, "UK English Female");
 }
 
-test = function(){
+test = function(stuff){
+  if(stuff == undefined)
+    stuff = "I ate a cheeseburger";
   $.ajax({
     type: "POST",
     url: "/",
     data: {
-        input: "I ate a cheeseburger"
+        input: stuff
     },
     success: function(data) {
       console.log(data);
@@ -780,34 +782,36 @@ getVoice = function() {
                         console.log(data);
                         //responsiveVoice.speak("You did " + data.number + data.activity, "UK English Female");
                         //console.log(data.activity);
-                        var logdata = {};
+                        var logData = {};
                         switch (data.intent) {
 
                             case 'Food_eaten':
-                                crystalresponse = "Great, I added that you have eaten " + data.number + data.activity + " to your log";
+                                crystalresponse = "Great, I added that you have eaten " + data.number + data.food + " to your log";
                                 responsiveVoice.speak(crystalresponse, "UK English Female");
-                                console.log("" + data.result.parameters.text);
-                                var key2 = dataset[("" + data.text)];
-                                prot += key2.Protein;
-                                // fat += key2["Lipid_Tot"];
-                                // carb += key2["Carbohydrt"];
+                                console.log("" + data.food);
+                                var key2 = dataset[("" + data.food)];
+                                console.log(dataset[("" + data.food)]);                              
+                                prot += key2["Protein"]
+                                fat += key2["Lipid_Tot"];
+                                carb += key2["Carbohydrt"];
                                 calc();
                                 logData.activity = data.activity;
                                 logData.count = data.number;
                                 logData.date = new Date();
                                 log.push(logData);
+                                $("#calories").text(cal_eaten);
                                 messagesRef.push({
                                     name: "Crystal",
                                     text: crystalresponse
                                 });
                                 break;
                             case 'Food_option':
-                                if (caloriesShould(data.text)) {
-                                    crystalresponse = "Great, you should eat " + data.text;
-                                    responsiveVoice.speak(crystalresponse, "UK English Female");
+                                if (caloriesShould(("" + data.food))) {
+                                    crystalresponse = "Great, you should eat " + data.food;
                                 } else {
-                                    crystalresponse = "You should not eat" + data.text + "it overloads your diet."
+                                    crystalresponse = "You should not eat " + data.food + " it overloads your diet."
                                 }
+                                responsiveVoice.speak(crystalresponse, "UK English Female");
                                 messagesRef.push({
                                     name: "Crystal",
                                     text: crystalresponse
@@ -818,10 +822,13 @@ getVoice = function() {
                                 op();
                                 if (returnFood == "") {
                                     crystalresponse = "There are no recommended foods."
+                                    $("#crystalSuggest").text("" + returnFood);
+
                                 } else {
                                     crystalresponse = "You should eat" + returnFood;
                                 }
                                 responsiveVoice.speak(crystalresponse, "UK English Female");
+                                returnFood = "";
                                 messagesRef.push({
                                     name: "Crystal",
                                     text: crystalresponse
