@@ -19,7 +19,7 @@ var unit = "",
 
 
 var setCal = function() {
-    if (gender == "Male") {
+    if (gender == "male") {
         if (exer == 0) {
             min = 1.3;
         } else if (exer == 1) {
@@ -42,7 +42,7 @@ var setCal = function() {
         } else if (age >= 60) {
             cal = 11.7 * min * weight + 587;
         }
-    } else if (gender == "Female") {
+    } else if (gender == "female") {
         if (exer == 0) {
             min = 1.3;
         } else if (exer == 1) {
@@ -70,7 +70,6 @@ var setCal = function() {
 
 function calc() //function gets called every time user says a food article
 {
-
     cal_eaten += c * (fat * 9 + prot * 4 + carb * 4);
     per_fat = (fat * 9 / cal_eaten);
     per_prot = (prot * 4 / cal_eaten);
@@ -153,10 +152,15 @@ var caloriesShould = function(food) {
 
 var caloriesBurn = 0;
 
-updateCalories = function(calories) {
-    $("#calories").text(calories);
-    $.apply
-}
+// updateCalories = function(calories) {
+//     $("#calorie-cntr").text(calories);
+// }
+// updateFat = function(calories) {
+//     $("#calorie-cntr").text(calories);
+// }
+// updateProt = function(calories) {
+//     $("#calorie-cntr").text(calories);
+// }
 
 var log = [];
 
@@ -255,7 +259,7 @@ reqUserInfo = function(reqParam) {
                         gender = 'other';
                     say("Okay, got it - you are " + gender);
                     $("#gender").text(gender);
-                    say("How many pounds do you weight?");
+                    say("How many pounds do you weigh?");
                     setTimeout(function() {
                         reqUserInfo("getWeight");
                     }, 4000);
@@ -263,7 +267,7 @@ reqUserInfo = function(reqParam) {
 
                 // Get user weight
                 else if (reqParam == "getWeight") {
-                    var weight = parseInt(splitScript[0]);
+                       weight = parseInt(splitScript[0]);
                     console.log(splitScript[0] + " -> " + weight);
                     console.log("Getting user weight...");
                     if (userVoiceInput.indexOf('i don\'t know') >= 0) {
@@ -273,7 +277,7 @@ reqUserInfo = function(reqParam) {
                         weight = 150;
                         say("Okay, let's just say you're 150 pounds.");
                     } else {
-                        weight = weight;
+                        weight = 150;
                         // weight = callNutriFit("getWeight");
                         if (userVoiceInput.indexOf('kilograms')) {
                             systemUse = "metric";
@@ -295,6 +299,10 @@ reqUserInfo = function(reqParam) {
                     console.log("Getting user age...");
                     // age = callNutriFit("getAge");
                     age = splitScript[0];
+                    if(isNaN(age))
+                      age = 20;
+                    else
+                      age = parseInt(age);
                     $("#age").text(age);
                     say("Okay, got it - you are " + age + " years old.");
                     say("On a scale of 1 to 3, how much do you exercise?");
@@ -303,7 +311,8 @@ reqUserInfo = function(reqParam) {
                     }, 5000);
                 } else if (reqParam == "getExer") {
                     console.log("Getting user exercise level...");
-                    exer = splitScript[0];
+                    exer = 2;
+                    setCal()
                     say("Alright, I have saved your information!");
                     setCal();
                 }
@@ -418,7 +427,7 @@ callNutriFit = function() {
                                 console.log("" + data.food);
                                 var key2 = dataset[("" + data.food)];
                                 console.log(dataset[("" + data.food)]);
-                                prot += key2["Protein"]
+                                prot += key2["Protein"];
                                 fat += key2["Lipid_Tot"];
                                 carb += key2["Carbohydrt"];
                                 calc();
@@ -426,10 +435,13 @@ callNutriFit = function() {
                                 logData.count = data.number;
                                 logData.date = new Date();
                                 log.push(logData);
-                                $("#calorie_cntr").text(cal_eaten);
-                                $("#fat_cntr").text(fat);
-                                $("#protein_cntr").text(prot);
-                                $("#carb_cntr").text(carb);
+                                setTimeout(function(){
+                                  $("#calorie-cntr").text("" + cal_eaten);
+                                  $("#fat-cntr").text("" + fat);
+                                  $("#protein-cntr").text("" + prot);
+                                  $("#carb-cntr").text("" + carb);
+                                }, 200);
+                                //updateGraph("Mar 9", prot, fat, carb);
                                 messagesRef.push({
                                     name: "shirley",
                                     text: shirleyresponse
