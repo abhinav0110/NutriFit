@@ -1,6 +1,6 @@
 
 sayThings = function(){
-    var things = $("#things").text;
+    var things = $("#things").val();
     say(things);
 }
 
@@ -8,43 +8,39 @@ say = function(speech) {
     responsiveVoice.speak(speech, "US English Female");
 }
 
-// Instantiate Firebase Connection
-var nutrifit_db, nutrifit_db_food;
+// Instantiate Firebase Connections
+var nutrifit_db_users, nutrifit_db_food;
 
 init_db = function(){
-    nutrifit_db = new Firebase('https://nutrifit.firebaseio.com/');
-    console.log("Attempted to connect to https://nutrifit.firebaseio.com/");
-    if(nutrifit_db)
+    // To Users Firebase Collection
+    nutrifit_db_users = new Firebase('https://nutrifit.firebaseio.com/users/');
+    console.log("Attempted to connect to https://nutrifit.firebaseio.com/users/");
+    if(nutrifit_db_users)
         console.log("Successfully connected!");
     else
-        console.log("Error connecting to Firebase!");
+        console.log("Error connecting to Firebase/users!");
 
+    // To Food Firebase Collection
     nutrifit_db_food = new Firebase('https://nutrifit.firebaseio.com/food/');
     console.log("Attempted to connect to https://nutrifit.firebaseio.com/food/");
-    if(nutrifit_db)
+    if(nutrifit_db_food)
         console.log("Successfully connected!");
     else
-        console.log("Error connecting to Firebase!");
+        console.log("Error connecting to Firebase/food!");
 }
 
-pushThisToFirebase = function() {
-    console.log("Attempted to push custom values to Firebase.");
-    console.log($("#json").text)
-    nutrifit_db.push($("#json").text);
-}
-
-function pushToFirebase(){
-    nutrifit_db.push(data);
-}
-
+// Push All Food Data to Firebase Database
 function pushFood(){
     for(var i = 0; i < data.length; i++){
         nutrifit_db_food.push(data[i]);
     }
 }
 
+
 function getFood(){
-    nutrifit_db_food.on()
+    nutrifit_db_food.once("value", function(data){
+        console.log(data);
+    });
 }
 
 function deleteFirebase(){
