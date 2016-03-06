@@ -18,7 +18,6 @@ var per_fat = 0;
 var per_carb = 0;
 var per_prot = 0;
 var cal_eaten = 0;
-var log = {};
 
 
 var setCal = function(){
@@ -355,6 +354,7 @@ continueCoach = function(phrase, type){
             };
             recognizer.onerror = function(error) {
                 console.log(error);
+		continueCoach(phrase, type);
             };
             try {
                 recognizer.start(); // SUCCESS
@@ -434,6 +434,7 @@ startCoach = function() {
             };
             recognizer.onerror = function(error) {
                 console.log(error);
+		startCoach();
             };
             try {
                 recognizer.start(); // SUCCESS
@@ -487,12 +488,17 @@ getVoice = function() {
                           console.log(data);
                           //responsiveVoice.speak("You did " + data.number + data.activity, "UK English Female");
                           //console.log(data.activity);
-                          switch (data.intent) {
+                          var logdata = {};
+			  switch (data.intent) {
 
                               case 'Food_eaten':
                               	 crystalresponse = "Great, I added that you have eaten " + data.number + data.activity + " to your log";
                                   responsiveVoice.speak(crystalresponse, "UK English Female");
-                                  caloriesBurn = caloriesRep(caloriesBurn,data.number);
+                                  var key2 = dataset.key(data.activity);
+				  prot += key2["Protein"];
+				  fat += key2["Lipid_Tot"];
+				  carb += key2["Carbohydrt"];
+				  caloriesBurn = caloriesRep(caloriesBurn,data.number);
                                   logData.activity = data.activity;
                                   logData.count = data.number;
                                   logData.date = new Date();
@@ -583,7 +589,7 @@ init_firebase = function(username) {
     messagesRef = new Firebase('https://nutrifit.firebaseio.com/' + username);
     console.log("Attempted to connect to https://nutrifit.firebaseio.com/" + username);
     messagesRef.push({
-    	name: "Crystal",
+    	name: "NutriFit",
     	text: "Hi " + currentUser + ", it's nice to see you!"
     });
     messagesRef.push({
@@ -689,3 +695,83 @@ function Sound(source,volume,loop)
         this.loop=loop;
     }
 }
+
+var dataset = {"Cheddar Cheese":{
+    "Energ_Kcal": 403,
+    "Protein": 24.9,
+    "Lipid_Tot": 33.14,
+    "Carbohydrt": 1.28,
+    "Sugar_Tot": 0.52
+  },
+    "Roasted Turkey":{
+    "Energ_Kcal": 208,
+    "Protein": 28.1,
+    "Lipid_Tot": 9.73,
+    "Carbohydrt": 0,
+    "Sugar_Tot": 0,
+    "Sodium": 68,
+    "Cholestrl": 82,
+  },
+    "Fried Chicken":{
+    "Energ_Kcal": 289,
+    "Protein": 22.54,
+    "Lipid_Tot": 17.35,
+    "Carbohydrt": 9.42,
+    "Sugar_Tot": 0,
+    "Sodium": 292,
+    "Cholestrl": 87,
+  },
+    "Apple":{
+    "Energ_Kcal": 52,
+    "Protein": 0.26,
+    "Lipid_Tot": 0.17,
+    "Carbohydrt": 13.81,
+    "Sugar_Tot": 10.39,
+    "Sodium": 1,
+    "Cholestrl": 0,
+  },
+    "Banana":{
+    "Energ_Kcal": 89,
+    "Protein": 1.09,
+    "Lipid_Tot": 0.33,
+    "Carbohydrt": 22.84,
+    "Sugar_Tot": 12.23,
+    "Sodium": 1,
+    "Cholestrl": 0,
+  },
+    "Blueberries":{
+    "Energ_Kcal": 57,
+    "Protein": 0.74,
+    "Lipid_Tot": 0.33,
+    "Carbohydrt": 14.49,
+    "Sugar_Tot": 9.96,
+    "Sodium": 1,
+    "Cholestrl": 0,
+  },
+    "Orange Juice":{
+    "Energ_Kcal": 45,
+    "Protein": 0.7,
+    "Lipid_Tot": 0.2,
+    "Carbohydrt": 10.4,
+    "Sugar_Tot": 8.4,
+    "Sodium": 1,
+    "Cholestrl": 0,
+  },
+    "Pear":{
+    "Energ_Kcal": 58,
+    "Protein": 0.38,
+    "Lipid_Tot": 0.12,
+    "Carbohydrt": 15.46,
+    "Sugar_Tot": 9.8,
+    "Sodium": 1,
+    "Cholestrl": 0,
+  },
+    "Roast Pork":{
+    "Energ_Kcal": 273,
+    "Protein": 26.83,
+    "Lipid_Tot": 17.61,
+    "Carbohydrt": 0,
+    "Sugar_Tot": 0,
+    "Sodium": 60,
+    "Cholestrl": 94,
+  }};
