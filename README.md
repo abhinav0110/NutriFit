@@ -8,6 +8,10 @@
 ####Best Health Hack: 1st Place
 ####Prize: Jawbone UP 2 + a MLH Finalist medal for each member!
 
+![Alt text](/img/Preview1.png?raw=true "Homepage")
+![Alt text](/img/Preview2.png?raw=true "Homepage")
+
+
 ######Semi working web version (doesn't work completely, all features work on local machine): http://nutrifit.azurewebsites.net/NutriFit/
 
 ##Inspiration
