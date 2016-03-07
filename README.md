@@ -1,6 +1,15 @@
 # BrickHacks 2
 # NutriFit
 
+####Team NutriFit - A Voice Interactive, A.I. Driven Nutritionist Web App
+
+####Made by John Nguyen, David Bang, Aditya Bhavnani and William T Carver
+
+####Best Health Hack: 1st Place
+####Prize: Jawbone UP 2 + a MLH Finalist medal for each member!
+
+######Semi working web version (doesn't work completely, all features work on local machine): http://nutrifit.azurewebsites.net/NutriFit/
+
 ##Inspiration
 Everyone wants to live a healthy and fit life. But this is getting increasingly difficult to accomplish as people are eating less healthy food. Obesity is soaring globally and correlating diseases such as heart disease and diabetes are on the rise. Not everyone knows how or has the money to afford a personal dietitian. Introducing NutriFit, the personalized interactive, voice-driven A.I. nutritionist who will establish a personalized nutritional intake schedule based on food consumption. Shirley, NutriFit’s nutritionist, reports back with what you should do to maintain a perfect, healthy body.
 ##What it does
