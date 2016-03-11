@@ -1,4 +1,4 @@
-# BrickHacks 2
+# BrickHack 2
 # NutriFit
 
 ####Team NutriFit - A Voice Interactive, A.I. Driven Nutritionist Web App
